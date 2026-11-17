@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Profile } from "@/types/database";
 import { VexoraLogo } from "@/components/brand/VexoraLogo";
@@ -18,12 +18,15 @@ export default function PlatformLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const params = useParams<{ code?: string }>();
   const supabase = createClient();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [activeRoomId, setActiveRoomId] = useState<string | undefined>(undefined);
   const [dmFriend, setDmFriend] = useState<Profile | null>(null);
+
+  const isRoomPage = pathname?.startsWith("/room/");
 
   useEffect(() => {
     const loadMe = async () => {
@@ -86,7 +89,11 @@ export default function PlatformLayout({
       <BanGuard userId={profile.id} />
 
       <header className="border-b border-[#262833] bg-[#0c0d12]/85 backdrop-blur-md sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div
+          className={`${
+            isRoomPage ? "w-full px-4 sm:px-6" : "max-w-7xl mx-auto px-4 sm:px-6"
+          } h-16 flex items-center justify-between`}
+        >
           <Link href="/dashboard">
             <VexoraLogo size="sm" />
           </Link>
@@ -109,14 +116,18 @@ export default function PlatformLayout({
         </div>
       </header>
 
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-6">
-        <main className="flex-1 min-w-0">{children}</main>
-        <FriendsSidebar
-          currentUserId={profile.id}
-          activeRoomId={activeRoomId}
-          onOpenDm={(f) => setDmFriend(f)}
-        />
-      </div>
+      {isRoomPage ? (
+        <div className="flex-1 w-full px-4 sm:px-6 py-4">{children}</div>
+      ) : (
+        <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-6">
+          <main className="flex-1 min-w-0">{children}</main>
+          <FriendsSidebar
+            currentUserId={profile.id}
+            activeRoomId={activeRoomId}
+            onOpenDm={(f) => setDmFriend(f)}
+          />
+        </div>
+      )}
 
       <DirectMessageDrawer
         currentUserId={profile.id}
