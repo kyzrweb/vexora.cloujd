@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --bg-main: #0c0d12;
+  --bg-card: #13151d;
+  --bg-elevated: #181920;
+  --bg-input: #0f1014;
+  --border-subtle: #262833;
+  --accent-primary: #5865f2;
+  --accent-hover: #4752c4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--bg-main);
+  color: #f3f4f6;
+  min-height: 100vh;
+}
+
+/* Sfondo Vexora: griglia 56px + sfumature radiali blu-indaco a sinistra e bordeaux a destra */
+.vexora-bg {
+  background-color: #0c0d12;
+  background-image:
+    radial-gradient(circle at 12% 20%, rgba(88, 101, 242, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 88% 75%, rgba(157, 23, 77, 0.13) 0%, transparent 48%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0d12;
+}
+::-webkit-scrollbar-thumb {
+  background: #262833;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #383b4b;
+}
